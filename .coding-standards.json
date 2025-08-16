@@ -1,0 +1,45 @@
+{
+  "name": "Best Code Practices",
+  "rules": [
+    {
+      "description": "Use clear, consistent naming conventions",
+      "content": "Always use descriptive and meaningful variable, function, and class names. Follow language-specific conventions (camelCase for JavaScript/TypeScript variables & functions, PascalCase for classes, snake_case for Python). Avoid abbreviations unless widely understood."
+    },
+    {
+      "description": "Enforce code readability",
+      "content": "Keep functions small and focused on a single responsibility. Avoid deeply nested code; use early returns to reduce nesting. Use whitespace and indentation consistently."
+    },
+    {
+      "description": "Add comments and documentation",
+      "content": "Write clear docstrings or JSDoc-style comments for public functions, classes, and modules. Explain non-obvious code decisions. Avoid redundant comments that restate code."
+    },
+    {
+      "description": "Write DRY, reusable code",
+      "content": "Do not repeat logic. Extract reusable functionality into helper functions or modules. Favor composition over duplication."
+    },
+    {
+      "description": "Error handling",
+      "content": "Always handle potential errors gracefully. Validate inputs. Use try/catch or equivalent mechanisms. Avoid swallowing errors; log them meaningfully."
+    },
+    {
+      "description": "Security best practices",
+      "content": "Never hardcode secrets, API keys, or passwords. Sanitize and validate all user input to prevent injection attacks. Follow OWASP guidelines."
+    },
+    {
+      "description": "Performance awareness",
+      "content": "Write efficient algorithms with appropriate time and space complexity. Avoid unnecessary computations. Use caching and lazy loading when beneficial."
+    },
+    {
+      "description": "Testing and quality assurance",
+      "content": "Write unit tests for critical functions. Aim for high coverage without sacrificing test quality. Follow Arrange-Act-Assert or similar patterns in tests."
+    },
+    {
+      "description": "Version control discipline",
+      "content": "Keep commits small, focused, and with clear commit messages. Do not commit generated files or secrets. Follow branching strategies like GitFlow or trunk-based development."
+    },
+    {
+      "description": "Language/framework best practices",
+      "content": "Always follow official style guides and linting rules for the chosen language/framework. Keep dependencies updated and remove unused ones."
+    }
+  ]
+}

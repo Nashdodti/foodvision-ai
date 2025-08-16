@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodVision AI - Intelligent Food Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-bg-alt {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .rating-badge {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .rating-badge:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pros-cons-item {
+            animation: fadeInUp 0.5s ease-out;
+            transition: all 0.3s ease;
+        }
+        
+        .pros-cons-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .camera-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .results-panel {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 20px 40px rgba(240, 147, 251, 0.3);
+        }
+        
+        .floating-card {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.2);
+        }
+        
+        .capture-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .capture-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .capture-btn:hover::before {
+            left: 100%;
+        }
+        
+        .capture-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .loading-dots {
+            display: inline-block;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="glass-effect fixed top-0 left-0 right-0 z-50 border-b border-white/20">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-utensils text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">FoodVision AI</h1>
+                        <p class="text-xs md:text-sm text-gray-600">Intelligent Food Analysis</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-6 text-sm">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Features</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
+                    </div>
+                    <button class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg text-sm md:text-base font-medium hover:shadow-lg transition-all">
+                        <i class="fas fa-camera mr-2"></i>Start Analysis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-20 pb-8">
+        <!-- Hero Section -->
+        <div class="px-4 mb-8">
+            <div class="text-center mb-8 max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 leading-tight">
+                    <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        AI-Powered
+                    </span>
+                    <br>Food Analysis
+                </h2>
+                <p class="text-base md:text-lg text-gray-600 leading-relaxed">
+                    Capture and analyze your food with AI technology
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Analysis Section - Responsive Layout -->
+        <div class="px-4 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Camera Section -->
+                <div class="camera-container rounded-2xl p-4 md:p-6">
+                    <div class="bg-white rounded-xl p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg md:text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-camera text-blue-600 mr-2"></i>
+                                Camera
+                            </h3>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-green-500 rounded-full pulse-animation"></div>
+                                <span class="text-xs text-gray-600">Ready</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Camera Preview -->
+                        <div class="relative bg-gray-900 rounded-lg overflow-hidden mb-4">
+                            <video id="camera" autoplay playsinline class="w-full h-64 md:h-80 lg:h-96 object-cover"></video>
+                            
+                            <!-- Camera Permission Overlay -->
+                            <div id="camera-overlay" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60">
+                                <div class="text-white text-center p-6 max-w-xs">
+                                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-camera text-white text-xl"></i>
+                                    </div>
+                                    <h3 class="text-base font-semibold mb-2">Camera Access</h3>
+                                    <p class="text-xs opacity-80 mb-4">Allow camera access to start analyzing food</p>
+                                    <button id="enable-camera-btn" class="bg-white text-gray-900 px-4 py-2 rounded-lg font-medium text-sm mb-3">
+                                        Enable Camera
+                                    </button>
+                                    <div class="text-xs opacity-60">
+                                        <p>📱 Tap camera icon in address bar if prompted</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Simple Guide -->
+                            <div class="absolute bottom-3 left-3 right-3">
+                                <div class="bg-black bg-opacity-40 rounded-lg px-2 py-1 text-white text-xs text-center">
+                                    Position food in center
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        
+
+                        
+                        <!-- Capture Button -->
+                        <button id="capture-btn" class="capture-btn w-full text-white font-semibold py-3 md:py-4 px-4 rounded-lg text-base md:text-lg transition-all duration-300 flex items-center justify-center">
+                            <i class="fas fa-camera-retro mr-2"></i>
+                            <span>Capture & Analyze</span>
+                        </button>
+                        
+                        <!-- Loading State -->
+                        <div id="loading" class="hidden mt-4">
+                            <div class="bg-white rounded-lg p-4 shadow">
+                                <div class="flex items-center justify-center space-x-3">
+                                    <div class="relative">
+                                        <div class="w-6 h-6 border-3 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-gray-700 font-medium text-sm">Analyzing...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-panel rounded-2xl p-4 md:p-6">
+                    <div class="bg-white rounded-xl p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg md:text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-chart-bar text-purple-600 mr-2"></i>
+                                Results
+                            </h3>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <span class="text-xs text-gray-600">Ready</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Product Name -->
+                        <div id="product-name-section" class="text-center mb-4 hidden">
+                            <h3 id="product-name" class="text-xl font-bold text-gray-800 mb-2"></h3>
+                        </div>
+
+                        <!-- Health Score -->
+                        <div id="health-score-section" class="text-center mb-4 hidden">
+                            <div class="inline-flex items-center space-x-2">
+                                <span class="text-sm text-gray-600">Health Score:</span>
+                                <span id="health-score" class="text-2xl font-bold text-green-600"></span>
+                            </div>
+                        </div>
+
+                        <!-- Rating Badge -->
+                        <div id="rating-section" class="text-center mb-6 hidden">
+                            <h4 class="text-base font-semibold text-gray-700 mb-3">Singapore Food Rating</h4>
+                            <div id="rating-badge" class="rating-badge inline-flex items-center px-6 py-3 rounded-xl text-white font-bold text-lg shadow-lg">
+                                <!-- Rating content will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Nutrition Details -->
+                        <div id="nutrition-details-section" class="mb-6 hidden">
+                            <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-chart-pie text-purple-600 mr-2 text-xl"></i>
+                                Nutrition Information
+                            </h4>
+                            <div id="nutrition-details">
+                                <!-- Nutrition details will be inserted here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Stats Cards -->
+                        <div id="stats-section" class="grid grid-cols-2 gap-3 mb-4 hidden">
+                            <div class="stats-card rounded-lg p-3 text-center">
+                                <div class="text-xl font-bold text-green-600" id="pros-count">0</div>
+                                <div class="text-xs text-gray-600">Pros</div>
+                            </div>
+                            <div class="stats-card rounded-lg p-3 text-center">
+                                <div class="text-xl font-bold text-red-600" id="cons-count">0</div>
+                                <div class="text-xs text-gray-600">Cons</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pros Section -->
+                        <div id="pros-section" class="mb-6 hidden">
+                            <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2 text-xl"></i>
+                                Strengths
+                            </h4>
+                            <ul id="pros-list" class="space-y-3">
+                                <!-- Pros will be inserted here -->
+                            </ul>
+                        </div>
+                        
+                        <!-- Cons Section -->
+                        <div id="cons-section" class="mb-6 hidden">
+                            <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-times-circle text-red-600 mr-2 text-xl"></i>
+                                Areas for Improvement
+                            </h4>
+                            <ul id="cons-list" class="space-y-3">
+                                <!-- Cons will be inserted here -->
+                            </ul>
+                        </div>
+
+                        <!-- Recommendations Section -->
+                        <div id="recommendations-section" class="mb-6 hidden">
+                            <!-- Recommendations will be inserted here -->
+                        </div>
+                        
+                        <!-- Initial State -->
+                        <div id="initial-state" class="text-center py-16">
+                            <div class="w-24 h-24 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-camera text-4xl text-gray-400"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold text-gray-700 mb-2">Ready to Analyze</h4>
+                            <p class="text-gray-500">Capture a photo of your food to get started with AI-powered analysis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-utensils text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">FoodVision AI</span>
+                    </div>
+                    <p class="text-gray-400">Revolutionizing food analysis with cutting-edge AI technology.</p>
+                </div>
+                
+                <div>
+                    <h5 class="font-semibold mb-4">Features</h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Smart Camera Capture</li>
+                        <li>AI-Powered Analysis</li>
+                        <li>Quality Ratings</li>
+                        <li>Voice Feedback</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-semibold mb-4">Technology</h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Computer Vision</li>
+                        <li>Machine Learning</li>
+                        <li>Natural Language</li>
+                        <li>Real-time Processing</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-semibold mb-4">Connect</h5>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 FoodVision AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
