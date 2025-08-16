@@ -119,29 +119,57 @@ class FoodVisionApp {
      * @returns {Promise<void>}
      */
     async initializeCamera() {
+        // Enhanced debugging for live deployment
+        console.log('🔍 Starting camera initialization...');
+        console.log('🌐 Current URL:', window.location.href);
+        console.log('🔒 Is HTTPS:', window.location.protocol === 'https:');
+        console.log('📱 User Agent:', navigator.userAgent);
+        
         // Validate browser support
         if (!this.isCameraSupported()) {
+            console.error('❌ Camera API not supported');
             throw new Error('Camera API not supported in this browser');
+        }
+        
+        console.log('✅ Camera API is supported');
+        
+        // Check if we're on HTTPS (required for camera access)
+        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+            console.error('❌ HTTPS required for camera access');
+            throw new Error('HTTPS is required for camera access. Please use https://');
         }
         
         const isMobileDevice = this.detectMobileDevice();
         const cameraConstraints = this.getCameraConstraints(isMobileDevice);
         
-        console.log('Initializing camera with constraints:', cameraConstraints);
+        console.log('📋 Camera constraints:', cameraConstraints);
+        console.log('📱 Is mobile device:', isMobileDevice);
         
-        this.cameraStream = await navigator.mediaDevices.getUserMedia(cameraConstraints);
+        try {
+            console.log('🎥 Requesting camera access...');
+            this.cameraStream = await navigator.mediaDevices.getUserMedia(cameraConstraints);
+            console.log('✅ Camera stream obtained');
+        } catch (error) {
+            console.error('❌ Camera access failed:', error);
+            console.error('Error name:', error.name);
+            console.error('Error message:', error.message);
+            throw error;
+        }
+        
         this.camera = document.getElementById('camera');
         
         if (!this.camera) {
+            console.error('❌ Camera video element not found');
             throw new Error('Camera video element not found');
         }
         
+        console.log('📹 Setting camera stream to video element');
         this.camera.srcObject = this.cameraStream;
         
         // Wait for video to load with timeout
         await this.waitForVideoLoad();
         
-        console.log('Camera initialized successfully');
+        console.log('🎉 Camera initialized successfully');
     }
 
     /**
@@ -909,7 +937,9 @@ class FoodVisionApp {
         const errorMessages = {
             'NotAllowedError': {
                 message: 'Camera permission denied.',
-                instructions: 'Tap the camera icon in your browser\'s address bar, or go to Settings > Safari > Camera and allow access.'
+                instructions: window.location.protocol === 'https:' 
+                    ? 'Tap the camera icon in your browser\'s address bar, or go to Settings > Safari > Camera and allow access.'
+                    : 'HTTPS is required for camera access. Please use the HTTPS version of this site.'
             },
             'NotFoundError': {
                 message: 'No camera found.',
@@ -918,12 +948,22 @@ class FoodVisionApp {
             'NotReadableError': {
                 message: 'Camera is in use by another application.',
                 instructions: 'Please close other apps using the camera (like Camera app) and try again.'
+            },
+            'NotSupportedError': {
+                message: 'Camera not supported on this device.',
+                instructions: 'Please try using a different device or browser that supports camera access.'
+            },
+            'SecurityError': {
+                message: 'Camera access blocked by security policy.',
+                instructions: 'This site must be served over HTTPS to access the camera. Please use the secure version.'
             }
         };
         
         const defaultMessage = {
-            message: 'Camera access denied. Please allow camera permissions.',
-            instructions: 'Check your browser settings and ensure camera permissions are enabled.'
+            message: 'Camera access failed.',
+            instructions: window.location.protocol === 'https:' 
+                ? 'Check your browser settings and ensure camera permissions are enabled.'
+                : 'HTTPS is required for camera access. Please use the secure version of this site.'
         };
         
         return errorMessages[error.name] || defaultMessage;
