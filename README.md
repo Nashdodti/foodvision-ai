@@ -9,7 +9,7 @@
 ## 🌟 Features
 
 - **📸 Live Camera Capture** - Real-time camera feed with mobile-optimized interface
-- **🤖 AI-Powered Analysis** - Perplexity Vision API integration for intelligent food assessment
+- **🤖 AI-Powered Analysis** - Multiple AI providers: Gemini, Perplexity, and OpenAI for intelligent food assessment
 - **🎯 Singapore 5-Tier Rating System** - Premium, High Standard, Standard, Improvement Needed, Poor
 - **🔊 Voice Feedback** - Text-to-speech announcements of analysis results
 - **📱 Mobile-First Design** - Responsive layout optimized for mobile devices
@@ -23,14 +23,14 @@
 - **Node.js** 16.0.0 or higher
 - **npm** 8.0.0 or higher
 - **Modern web browser** with camera support
-- **Perplexity API key** (for AI analysis)
+- **AI API key** (Gemini, Perplexity, or OpenAI for analysis)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/foodvision-ai/foodvision-app.git
-   cd foodvision-app
+   git clone https://github.com/YOUR_USERNAME/foodvision-ai.git
+   cd foodvision-ai
    ```
 
 2. **Install dependencies**
@@ -41,7 +41,7 @@
 3. **Set up environment variables**
    ```bash
    cp .env.example .env
-   # Edit .env and add your Perplexity API key
+   # Edit .env and add your AI API key (see API Setup section)
    ```
 
 4. **Generate SSL certificates** (for mobile camera access)
@@ -70,21 +70,46 @@ Create a `.env` file in the root directory:
 PORT=8000
 HTTPS_PORT=8443
 
-# API Configuration
-PERPLEXITY_API_KEY=pplx-your-api-key-here
+# AI Provider (choose one: gemini, perplexity, or openai)
+DEFAULT_AI_PROVIDER=gemini
+
+# API Keys (add the one you want to use)
+GEMINI_API_KEY=your_gemini_key_here
+PERPLEXITY_API_KEY=your_perplexity_key_here
+OPENAI_API_KEY=your_openai_key_here
 ```
 
-### API Key Setup
+### AI API Setup
 
-1. **Get Perplexity API Key**
-   - Visit [Perplexity AI](https://www.perplexity.ai/)
-   - Sign up and obtain your API key
-   - Add it to your `.env` file
+Choose one of the supported AI providers:
 
-2. **Test API Connection**
-   ```bash
-   curl http://localhost:8000/api/test-perplexity
-   ```
+#### Option 1: Gemini (Recommended - Free tier available)
+1. Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Sign in with your Google account
+3. Create a new API key
+4. Add to `.env`: `GEMINI_API_KEY=your_key_here`
+5. Set: `DEFAULT_AI_PROVIDER=gemini`
+
+#### Option 2: Perplexity
+1. Visit [Perplexity AI](https://www.perplexity.ai/)
+2. Sign up and obtain your API key
+3. Add to `.env`: `PERPLEXITY_API_KEY=your_key_here`
+4. Set: `DEFAULT_AI_PROVIDER=perplexity`
+
+#### Option 3: OpenAI
+1. Visit [OpenAI Platform](https://platform.openai.com/account/api-keys)
+2. Create an API key
+3. Add to `.env`: `OPENAI_API_KEY=your_key_here`
+4. Set: `DEFAULT_AI_PROVIDER=openai`
+
+#### Test API Connection
+```bash
+# Test Gemini
+curl http://localhost:8000/api/test-gemini
+
+# Test Perplexity  
+curl http://localhost:8000/api/test-perplexity
+```
 
 ## 📱 Mobile Setup
 
@@ -219,9 +244,10 @@ npm test -- tests/app.test.js
 - Try refreshing the page
 
 **API Key Errors**
-- Verify your Perplexity API key is correct
-- Check the `.env` file configuration
-- Test API connectivity with `/api/test-perplexity`
+- Verify your AI API key is correct
+- Check the `.env` file configuration  
+- Test API connectivity with the appropriate test endpoint
+- Ensure you have credits/quota available
 
 **SSL Certificate Issues**
 - Regenerate certificates: `./generate-cert.sh`
@@ -276,7 +302,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Perplexity AI** for providing the vision analysis API
+- **Google Gemini**, **Perplexity AI**, and **OpenAI** for providing vision analysis APIs
 - **TailwindCSS** for the beautiful UI framework
 - **Font Awesome** for the icons
 - **Express.js** for the server framework
